@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KUSHN — Venture Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-900:#070d1b;
+    --navy-800:#0d1a30;
+    --navy-700:#152847;
+    --navy-600:#1f3a63;
+    --crimson-700:#7c1626;
+    --crimson-600:#9c1c2d;
+    --crimson-500:#b52335;
+    --paper:#eeece5;
+    --paper-raise:#f8f7f2;
+    --ink:#12141c;
+    --ink-soft:#454b5b;
+    --muted:#6b7182;
+    --line:rgba(18,20,28,0.12);
+    --line-strong:rgba(18,20,28,0.22);
+    --good:#2b6e4f;
+    --warn:#9c6b1b;
+    --bad:var(--crimson-700);
+    --radius-s:2px;
+    --radius-m:4px;
+    --maxw:1180px;
+    color-scheme: light;
+  }
+  :root:not([data-theme="light"]){ }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0b0f18;
+      --paper-raise:#111726;
+      --ink:#eceef4;
+      --ink-soft:#c3c8d6;
+      --muted:#8b93a8;
+      --line:rgba(236,238,244,0.14);
+      --line-strong:rgba(236,238,244,0.26);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0b0f18;
+    --paper-raise:#111726;
+    --ink:#eceef4;
+    --ink-soft:#c3c8d6;
+    --muted:#8b93a8;
+    --line:rgba(236,238,244,0.14);
+    --line-strong:rgba(236,238,244,0.26);
+    color-scheme: dark;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; scroll-padding-top: calc(84px + env(safe-area-inset-top,0px)); }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  img,svg{ max-width:100%; }
+  h1,h2,h3,h4{ font-family:'Fraunces',Georgia,serif; font-weight:600; color:var(--ink); margin:0; letter-spacing:-0.01em; }
+  p{ margin:0 0 14px; color:var(--ink-soft); max-width:64ch; }
+  a{ color:inherit; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+
+  /* ---------- Top bar / nav ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top,0px);
+  }
+  .topbar-inner{
+    max-width:var(--maxw); margin:0 auto; padding:14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .brandmark{ display:flex; align-items:center; gap:10px; }
+  .brandmark .k{
+    width:30px;height:30px;border-radius:50%;
+    background:var(--navy-800); color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',serif; font-weight:700; font-size:16px;
+  }
+  .brandmark span{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; letter-spacing:0.01em; }
+  .brandmark small{ display:block; font-family:'Inter'; font-size:10.5px; color:var(--muted); font-weight:500; margin-top:-2px; }
+  .navlinks{ display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; }
+  .navlinks::-webkit-scrollbar{ display:none; }
+  .navlinks a{
+    white-space:nowrap; text-decoration:none; font-size:13px; font-weight:600;
+    color:var(--muted); padding:7px 11px; border-radius:20px;
+  }
+  .navlinks a:hover{ color:var(--ink); background:var(--line); }
+  .navtag{
+    font-size:11px; font-weight:700; letter-spacing:0.04em;
+    padding:5px 10px; border-radius:20px; border:1px solid var(--line-strong);
+    color:var(--crimson-600); white-space:nowrap;
+  }
+  @media (max-width:900px){ .navlinks{ display:none; } }
+
+  /* ---------- Cover ---------- */
+  .cover{
+    background:
+      radial-gradient(1100px 520px at 82% -10%, rgba(181,35,53,0.28), transparent 60%),
+      linear-gradient(180deg, var(--navy-900), var(--navy-800) 60%, var(--navy-700));
+    color:#f2f1ea;
+    padding:76px 28px 64px;
+    position:relative;
+    overflow:hidden;
+  }
+  .cover::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 120px);
+    opacity:0.5; pointer-events:none;
+  }
+  .cover-inner{ max-width:var(--maxw); margin:0 auto; position:relative; }
+  .cover-eyebrow{
+    display:flex; align-items:center; gap:10px; margin-bottom:34px;
+    font-size:12.5px; color:#c9cede; font-weight:600;
+  }
+  .cover-eyebrow .dot{ width:6px;height:6px;border-radius:50%; background:var(--crimson-500); }
+  .cover-title{
+    font-size:clamp(52px,9vw,108px); line-height:0.94; color:#fbfaf6;
+    font-weight:600; letter-spacing:-0.02em;
+  }
+  .cover-title em{ font-style:italic; color:var(--crimson-500); font-weight:500; }
+  .cover-sub{
+    font-size:clamp(17px,2.1vw,21px); color:#d7dae6; max-width:44ch; margin-top:22px; font-family:'Fraunces',serif; font-weight:400; font-style:italic;
+  }
+  .cover-meta{
+    display:flex; flex-wrap:wrap; gap:34px; margin-top:52px; padding-top:28px;
+    border-top:1px solid rgba(255,255,255,0.16);
+  }
+  .cover-meta div{ min-width:120px; }
+  .cover-meta .label{ font-size:11px; text-transform:uppercase; letter-spacing:0.09em; color:#8f96ab; font-weight:600; margin-bottom:6px; }
+  .cover-meta .value{ font-family:'Fraunces',serif; font-size:19px; color:#f4f3ee; }
+  .cover-stats{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+    margin-top:44px; background:rgba(255,255,255,0.14); border-radius:6px; overflow:hidden;
+  }
+  .cover-stat{ background:rgba(10,17,32,0.55); padding:20px 20px 18px; }
+  .cover-stat .num{ font-family:'Fraunces',serif; font-size:30px; color:#fff; font-weight:600; }
+  .cover-stat .cap{ font-size:12px; color:#aab0c2; margin-top:4px; }
+
+  /* ---------- Layout shell ---------- */
+  .shell{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:220px 1fr; gap:56px; padding:0 28px; }
+  @media (max-width:900px){ .shell{ grid-template-columns:1fr; } }
+  .rail{ position:relative; }
+  .rail-inner{ position:sticky; top:78px; padding:44px 0; }
+  .rail a{
+    display:block; text-decoration:none; font-size:13px; color:var(--muted); font-weight:600;
+    padding:7px 0; border-left:2px solid transparent; padding-left:14px;
+  }
+  .rail a:hover, .rail a.active{ color:var(--crimson-600); border-left-color:var(--crimson-500); }
+  .rail-foot{ margin-top:28px; padding-left:14px; }
+  .rail-foot .badge{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:0.03em;
+    color:var(--muted); border:1px solid var(--line-strong); border-radius:20px; padding:4px 9px;
+  }
+  @media (max-width:900px){ .rail{ display:none; } }
+
+  main{ min-width:0; padding-bottom:80px; }
+  section.chapter{ padding:64px 0 6px; border-bottom:1px solid var(--line); }
+  section.chapter:last-of-type{ border-bottom:none; }
+  .chapter-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:30px; }
+  .chapter-num{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--crimson-600); font-weight:500; }
+  .chapter-head h2{ font-size:clamp(26px,3.4vw,36px); }
+  .chapter-kicker{ font-size:14px; color:var(--muted); margin:-20px 0 28px; max-width:60ch; font-family:'Fraunces',serif; font-style:italic; }
+
+  h3.sub{ font-size:19px; margin:36px 0 14px; color:var(--ink); }
+  h4.minor{ font-size:14.5px; margin:22px 0 8px; color:var(--ink); font-family:'Inter'; font-weight:700; }
+
+  .lede{ font-size:18px; color:var(--ink-soft); max-width:68ch; font-family:'Fraunces',serif; font-weight:400; }
+
+  /* generic card grid */
+  .grid{ display:grid; gap:14px; }
+  .grid-2{ grid-template-columns:repeat(2,1fr); }
+  .grid-3{ grid-template-columns:repeat(3,1fr); }
+  .grid-4{ grid-template-columns:repeat(4,1fr); }
+  @media (max-width:760px){ .grid-2,.grid-3,.grid-4{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .grid-2,.grid-3,.grid-4{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--paper-raise); border:1px solid var(--line); border-radius:var(--radius-m);
+    padding:20px;
+  }
+  .card h4{ font-family:'Fraunces',serif; font-size:16px; font-weight:600; margin:0 0 6px; }
+  .card p{ font-size:13.6px; margin:0; }
+  .card .tag{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:0.03em;
+    padding:3px 8px; border-radius:20px; margin-bottom:10px;
+  }
+  .tag.must{ background:rgba(156,28,45,0.12); color:var(--crimson-700); }
+  .tag.nice{ background:rgba(107,113,130,0.14); color:var(--ink-soft); }
+
+  .stat-row{ display:flex; flex-wrap:wrap; gap:36px; margin:26px 0 6px; }
+  .stat{ min-width:140px; }
+  .stat .n{ font-family:'Fraunces',serif; font-size:32px; font-weight:600; color:var(--navy-800); }
+  :root[data-theme="dark"] .stat .n, body:has(:root:not([data-theme="light"])) {}
+  @media (prefers-color-scheme:dark){ .stat .n{ color:#f0f1f6; } }
+  :root[data-theme="dark"] .stat .n{ color:#f0f1f6; }
+  .stat .c{ font-size:12.5px; color:var(--muted); margin-top:3px; }
+
+  /* market bar chart */
+  .barchart{
+    display:flex; align-items:flex-end; gap:10px; height:200px; margin:28px 0 8px;
+    padding:0 4px; border-bottom:1px solid var(--line-strong);
+  }
+  .bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .bar-col .fig{ font-size:11px; font-family:'IBM Plex Mono',monospace; color:var(--muted); margin-bottom:6px; }
+  .bar-col .bar{ width:100%; max-width:38px; border-radius:3px 3px 0 0; background:linear-gradient(180deg,var(--crimson-500),var(--navy-800)); }
+  .bar-col .yr{ font-size:11.5px; color:var(--muted); margin-top:8px; }
+  .bar-col.peak .bar{ background:linear-gradient(180deg,var(--crimson-500),var(--crimson-700)); }
+
+  /* tables */
+  .table-wrap{ overflow-x:auto; margin:18px 0 8px; border:1px solid var(--line); border-radius:var(--radius-m); }
+  table{ border-collapse:collapse; width:100%; min-width:640px; font-size:13.5px; }
+  thead th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--muted); font-weight:700; padding:11px 14px; background:var(--paper-raise);
+    border-bottom:1px solid var(--line-strong); white-space:nowrap;
+  }
+  tbody td{ padding:11px 14px; border-bottom:1px solid var(--line); color:var(--ink-soft); vertical-align:top; }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody td strong{ color:var(--ink); font-weight:600; }
+  tr.hi td{ background:rgba(156,28,45,0.05); }
+  tr.hi td:first-child strong{ color:var(--crimson-700); }
+  .yn{ font-weight:700; }
+  .yn.no{ color:var(--muted); }
+  .yn.yes{ color:var(--good); }
+
+  /* meters (moat / scores) */
+  .meter-row{ display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid var(--line); }
+  .meter-row:last-child{ border-bottom:none; }
+  .meter-label{ width:190px; flex:none; font-size:13.5px; font-weight:600; }
+  .meter-track{ flex:1; height:7px; border-radius:20px; background:var(--line); position:relative; overflow:hidden; }
+  .meter-fill{ position:absolute; inset:0; border-radius:20px; background:var(--navy-700); }
+  .meter-fill.weak{ background:var(--crimson-600); }
+  .meter-fill.med{ background:var(--warn); }
+  .meter-fill.strong{ background:var(--good); }
+  .meter-val{ width:96px; flex:none; font-size:12px; font-weight:700; text-align:right; color:var(--muted); }
+
+  /* risk list */
+  .risk{ display:grid; grid-template-columns:34px 1fr; gap:14px; padding:16px 0; border-bottom:1px solid var(--line); }
+  .risk:last-child{ border-bottom:none; }
+  .risk .rank{ font-family:'Fraunces',serif; font-size:20px; color:var(--muted); }
+  .risk h4{ font-size:15px; margin:0 0 5px; }
+  .risk .badges{ display:flex; gap:8px; margin:6px 0 8px; }
+  .badge-sm{ font-size:10.5px; font-weight:700; letter-spacing:0.02em; padding:2px 8px; border-radius:20px; }
+  .badge-sm.critical{ background:rgba(156,28,45,0.14); color:var(--crimson-700); }
+  .badge-sm.high{ background:rgba(156,107,27,0.16); color:var(--warn); }
+  .badge-sm.medium{ background:rgba(107,113,130,0.16); color:var(--ink-soft); }
+  .risk p{ font-size:13.5px; margin:0; }
+  .risk .mit{ margin-top:8px; font-size:13px; padding:10px 12px; background:var(--paper-raise); border-left:2px solid var(--good); border-radius:0 4px 4px 0; }
+  .risk .mit b{ color:var(--good); }
+
+  /* roadmap timeline */
+  .timeline{ position:relative; margin:26px 0 10px; padding-left:26px; }
+  .timeline::before{ content:""; position:absolute; left:6px; top:6px; bottom:6px; width:2px; background:var(--line-strong); }
+  .tl-item{ position:relative; padding-bottom:30px; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{ content:""; position:absolute; left:-26px; top:4px; width:11px; height:11px; border-radius:50%; background:var(--crimson-600); border:2px solid var(--paper); }
+  .tl-item .when{ font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--crimson-600); margin-bottom:4px; }
+  .tl-item h4{ font-size:16px; margin:0 0 6px; }
+  .tl-item ul{ margin:8px 0 0; padding-left:18px; }
+  .tl-item li{ font-size:13.5px; color:var(--ink-soft); margin-bottom:4px; }
+  .tl-item .metric{ display:inline-block; margin-top:8px; font-size:12.5px; font-weight:700; color:var(--navy-700); }
+  @media (prefers-color-scheme:dark){ .tl-item .metric{ color:#c7d3ea; } }
+  :root[data-theme="dark"] .tl-item .metric{ color:#c7d3ea; }
+
+  /* pull quote / callout */
+  .callout{
+    background:var(--navy-900); color:#f1f0ea; border-radius:6px; padding:28px 30px; margin:26px 0;
+    position:relative; overflow:hidden;
+  }
+  .callout::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--crimson-500); }
+  .callout p{ color:#dcdee8; margin:0; font-family:'Fraunces',serif; font-size:17px; font-style:italic; max-width:70ch; }
+  .callout .attr{ margin-top:12px; font-family:'Inter'; font-style:normal; font-size:12.5px; color:#98a0b6; }
+
+  .note-box{
+    border:1px dashed var(--line-strong); border-radius:var(--radius-m); padding:16px 18px; margin:18px 0;
+    font-size:13px; color:var(--muted);
+  }
+  .note-box strong{ color:var(--ink-soft); }
+
+  /* team */
+  .team-card{ background:var(--paper-raise); border:1px solid var(--line); border-radius:var(--radius-m); padding:22px; }
+  .team-card .avatar{
+    width:46px;height:46px;border-radius:50%; background:var(--navy-800); color:#fff;
+    display:flex;align-items:center;justify-content:center; font-family:'Fraunces',serif; font-weight:600; font-size:17px; margin-bottom:14px;
+  }
+  .team-card h4{ font-size:16.5px; margin:0 0 2px; }
+  .team-card .role{ font-size:12.5px; color:var(--crimson-600); font-weight:600; margin-bottom:10px; }
+
+  /* ask */
+  .ask-hero{
+    background:linear-gradient(135deg,var(--navy-800),var(--navy-900));
+    color:#f2f1ea; border-radius:8px; padding:38px 34px; margin:26px 0 30px;
+  }
+  .ask-hero .amt{ font-family:'Fraunces',serif; font-size:clamp(38px,5vw,54px); font-weight:600; }
+  .ask-hero .use{ color:#c9cede; font-size:14.5px; margin-top:10px; max-width:60ch; }
+  .ask-tiers{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:rgba(255,255,255,0.16); border-radius:6px; overflow:hidden; margin-top:22px; }
+  @media (max-width:760px){ .ask-tiers{ grid-template-columns:1fr 1fr; } }
+  .ask-tier{ background:rgba(10,17,32,0.5); padding:16px 16px 14px; }
+  .ask-tier .t{ font-size:11px; text-transform:uppercase; letter-spacing:0.05em; color:#9aa1b6; font-weight:700; }
+  .ask-tier .v{ font-family:'Fraunces',serif; font-size:19px; margin-top:5px; }
+
+  .src-list{ columns:2; column-gap:40px; font-size:12.5px; color:var(--muted); margin-top:10px; }
+  @media (max-width:640px){ .src-list{ columns:1; } }
+  .src-list div{ break-inside:avoid; margin-bottom:6px; }
+
+  footer{
+    max-width:var(--maxw); margin:0 auto; padding:44px 28px 60px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12.5px; color:var(--muted);
+  }
+
+  ::selection{ background:var(--crimson-600); color:#fff; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brandmark">
+      <div class="k">K</div>
+      <div>
+        <span>KUSHN</span>
+        <small>Comfort fits you.</small>
+      </div>
+    </div>
+    <div class="navlinks">
+      <a href="#summary">Summary</a>
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#market">Market</a>
+      <a href="#competition">Competition</a>
+      <a href="#model">Business Model</a>
+      <a href="#gtm">GTM</a>
+      <a href="#financials">Financials</a>
+      <a href="#moat">Moat &amp; Risk</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#ask">The Ask</a>
+    </div>
+    <div class="navtag">Pre-Seed · Confidential</div>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="cover-inner">
+    <div class="cover-eyebrow"><span class="dot"></span> VENTURE PORTFOLIO — PREPARED FOR THE EVALUATION PANEL</div>
+    <h1 class="cover-title">KUSHN<br><em>Comfort, engineered<br>around you.</em></h1>
+    <p class="cover-sub">Personalized replacement ear cushions for headphones and headsets — built from a smartphone ear-scan, an AI geometry engine, and 3D-printed manufacturing.</p>
+    <div class="cover-meta">
+      <div><div class="label">Team</div><div class="value">Head Hots</div></div>
+      <div><div class="label">Founders</div><div class="value">Prakhar · Rishabh · Aditi</div></div>
+      <div><div class="label">Stage</div><div class="value">Concept → Pilot</div></div>
+      <div><div class="label">Category</div><div class="value">Hardware + Occupational Health</div></div>
+    </div>
+    <div class="cover-stats">
+      <div class="cover-stat"><div class="num">$238.9B</div><div class="cap">Global headphone &amp; earphone market by 2033, 14.5% CAGR</div></div>
+      <div class="cover-stat"><div class="num">18–24mo</div><div class="cap">Average ear-cushion replacement cycle industry-wide</div></div>
+      <div class="cover-stat"><div class="num">$10K–21K</div><div class="cap">Cost to replace one contact-center employee</div></div>
+      <div class="cover-stat"><div class="num">800K+</div><div class="cap">Call-center agents in KUSHN's Tier-1 beachhead segment</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-inner">
+      <a href="#summary">01 · Executive Summary</a>
+      <a href="#problem">02 · The Problem</a>
+      <a href="#solution">03 · Our Solution</a>
+      <a href="#market">04 · Market Opportunity</a>
+      <a href="#competition">05 · Competitive Landscape</a>
+      <a href="#model">06 · Business Model</a>
+      <a href="#gtm">07 · Go-To-Market</a>
+      <a href="#financials">08 · Financials</a>
+      <a href="#moat">09 · Moat &amp; Risk</a>
+      <a href="#roadmap">10 · Roadmap</a>
+      <a href="#ask">11 · The Ask &amp; Team</a>
+      <div class="rail-foot"><span class="badge">Confidential</span></div>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- 01 EXECUTIVE SUMMARY -->
+    <section class="chapter" id="summary">
+      <div class="chapter-head"><span class="chapter-num">01</span><h2>Executive Summary</h2></div>
+      <p class="lede">KUSHN manufactures personalized replacement ear cushions for over-ear headphones and headsets, using smartphone-based ear scanning, a proprietary geometry-to-CAD pipeline, and 3D printing. The core insight: headphone discomfort isn't a foam problem, it's a geometry problem — and no one in the market is solving it at the anatomical level.</p>
+
+      <h3 class="sub">The elevator pitch</h3>
+      <p>Millions of people wear headphones and headsets for four or more hours a day, and current designs don't fit their ears. The industry has spent decades improving materials — softer foam, cooling gel, memory pads — while leaving the actual mismatch between generic pad geometry and individual ear anatomy untouched. KUSHN closes that gap: scan your ear with a phone, convert it to a manufacturable 3D model, and 3D-print a cushion built for your anatomy, compatible across major headphone and headset brands.</p>
+
+      <h3 class="sub">Where we stand, honestly</h3>
+      <p>We commissioned an independent, critical evaluation of this venture before building this portfolio, because we'd rather show a VC panel that we can take a hard look at ourselves than present an inflated pitch. The scorecard below is unfiltered.</p>
+
+      <div class="grid grid-3" style="margin-top:20px;">
+        <div class="card"><span class="tag nice">7 / 10</span><h4>Uniqueness</h4><p>The end-to-end scan-to-cushion workflow is novel in execution, though the underlying technology — photogrammetry, 3D printing — is off-the-shelf.</p></div>
+        <div class="card"><span class="tag nice">5 / 10</span><h4>Scalability</h4><p>3D printing doesn't scale like injection molding; manufacturing complexity is real and unit economics tighten with volume.</p></div>
+        <div class="card"><span class="tag nice">6 / 10</span><h4>Profitability</h4><p>Viable with volume and the right customer mix — currently an unprofitable path until Year 2.</p></div>
+        <div class="card"><span class="tag must">4 / 10</span><h4>Defensibility</h4><p>Weak structural moat today. Capital-intensive, not yet tech-defensible — addressed directly in Section 09.</p></div>
+        <div class="card"><span class="tag must">8 / 10</span><h4>Execution Complexity</h4><p>High. Supply chain, capital, and manufacturing expertise are all required simultaneously.</p></div>
+        <div class="card"><span class="tag nice">52 / 100</span><h4>Overall Score</h4><p>Below typical VC threshold today — a hard idea, not a bad one. See Section 11 for what changes this.</p></div>
+      </div>
+
+      <div class="callout">
+        <p>"You're not a bad business; you're a challenging one. The path forward is ruthless focus: prove the enterprise wedge, document the ROI, and pursue the occupational-health pivot rather than chasing D2C gaming."</p>
+        <div class="attr">— Independent venture evaluation, commissioned July 2026</div>
+      </div>
+
+      <p>This portfolio is built around that honesty. It lays out the problem, the product, the market, the numbers, the competitive reality, and — critically — the specific 12-month plan and pivot that address the panel's most likely objections before they're raised.</p>
+    </section>
+
+    <!-- 02 PROBLEM -->
+    <section class="chapter" id="problem">
+      <div class="chapter-head"><span class="chapter-num">02</span><h2>The Problem</h2></div>
+      <p class="chapter-kicker">Millions rely on headphones and headsets for work, learning, and entertainment — but current designs don't fit their ears.</p>
+
+      <div class="grid grid-3">
+        <div class="card"><h4>Pressure points</h4><p>Localized pressure on ear cartilage causes pain and long-term discomfort.</p></div>
+        <div class="card"><h4>Heat buildup</h4><p>Trapped heat and sweat lead to ear fatigue, itchiness, and reduced focus.</p></div>
+        <div class="card"><h4>Discomfort, early</h4><p>Most users feel discomfort within just 2–3 hours of continuous use.</p></div>
+      </div>
+
+      <h3 class="sub">The Interface Paradox</h3>
+      <p>The real problem isn't foam or material quality — it's the <strong style="color:var(--ink)">geometric mismatch</strong> between generic, one-size-fits-all pad shapes and individual ear anatomy. Better foam treats a symptom. Better geometry treats the cause. Pressure-mapping studies and user interviews with gamers and remote workers confirm the discomfort is geometry-driven, not material-driven — but there's an honest gap here too: we don't yet have published willingness-to-pay data, and many consumers replace an entire headphone rather than a worn-out pad.</p>
+
+      <h3 class="sub">Who's affected</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Segment</th><th>Daily usage</th><th>Population</th><th>Pain level</th><th>Priority</th></tr></thead>
+          <tbody>
+            <tr class="hi"><td><strong>Call center agents</strong></td><td>8+ hrs/day</td><td>~800K globally</td><td>High</td><td>Must-have</td></tr>
+            <tr class="hi"><td><strong>Aviation / audio professionals</strong></td><td>4–10 hrs/day</td><td>~150K globally</td><td>High</td><td>Must-have</td></tr>
+            <tr><td>Gamers / streamers</td><td>8+ hrs/day</td><td>~2–3M globally</td><td>High</td><td>Nice-to-have</td></tr>
+            <tr><td>Remote workers</td><td>6–8 hrs/day</td><td>~400M globally</td><td>Medium</td><td>Nice-to-have</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">Why it's a business problem, not just a comfort problem</h3>
+      <div class="stat-row">
+        <div class="stat"><div class="n">$10K–21K</div><div class="c">Estimated cost to replace one contact-center employee (recruiting, training, lost productivity)</div></div>
+        <div class="stat"><div class="n">18–24mo</div><div class="c">Average ear-cushion replacement cycle in the industry — slow, low-frequency purchase behavior</div></div>
+        <div class="stat"><div class="n">$275.5B</div><div class="c">Global headphone/headset market by 2030, growing at 10.1% CAGR</div></div>
+      </div>
+      <p style="margin-top:16px;">Discomfort isn't just personal — it drives higher turnover, more sick days, and lower productivity for the employers whose agents wear headsets all day, making it an occupational health and business liability, not merely an inconvenience.</p>
+    </section>
+
+    <!-- 03 SOLUTION -->
+    <section class="chapter" id="solution">
+      <div class="chapter-head"><span class="chapter-num">03</span><h2>Our Solution</h2></div>
+      <p class="chapter-kicker">Personalized ear cushions, designed for you — from ear scan to a perfectly fitted cushion, in three steps.</p>
+
+      <div class="grid grid-3">
+        <div class="card"><span class="tag nice">Step 1</span><h4>Scan</h4><p>An ear scan captured using the user's own smartphone via photogrammetry. Quick, accurate, and needs no special hardware.</p></div>
+        <div class="card"><span class="tag nice">Step 2</span><h4>Design</h4><p>A proprietary geometry engine converts the scan into a precise 3D model, optimized for comfort, fit, and multi-brand compatibility.</p></div>
+        <div class="card"><span class="tag nice">Step 3</span><h4>Manufacture</h4><p>3D printing and finishing produce a cushion custom-manufactured for that individual's anatomy, using durable, high-quality materials.</p></div>
+      </div>
+
+      <h3 class="sub">What makes KUSHN different</h3>
+      <div class="grid grid-4">
+        <div class="card"><h4>End-to-end customization</h4><p>The only workflow that goes from ear scan to a custom-manufactured cushion, start to finish.</p></div>
+        <div class="card"><h4>Solves the real problem</h4><p>Shifts the industry conversation from materials to anatomical customization.</p></div>
+        <div class="card"><h4>Multi-brand compatibility</h4><p>Works across major headphone and headset brands, not locked to one manufacturer.</p></div>
+        <div class="card"><h4>Built for enterprise</h4><p>Designed for high-usage environments like call centers and aviation, not just consumer novelty.</p></div>
+      </div>
+
+      <h3 class="sub">How we compare on approach</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Approach</th><th>Customization</th><th>Fit &amp; comfort</th><th>Key limitation</th></tr></thead>
+          <tbody>
+            <tr><td>Generic pads</td><td class="yn no">One-size-fits-all</td><td>Low–Moderate</td><td>No anatomical awareness</td></tr>
+            <tr><td>Premium materials</td><td class="yn no">No</td><td>Good</td><td>Better material, same mismatch</td></tr>
+            <tr><td>3D-printed audiophile pads</td><td class="yn yes">Yes, but slow</td><td>Good</td><td>Consumer-focused, long lead time</td></tr>
+            <tr class="hi"><td><strong>KUSHN</strong></td><td class="yn yes">Yes — individual ear scan</td><td><strong>Excellent</strong></td><td><strong>Built for real, daily use</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 04 MARKET -->
+    <section class="chapter" id="market">
+      <div class="chapter-head"><span class="chapter-num">04</span><h2>Market Opportunity</h2></div>
+      <p class="chapter-kicker">A large, growing audio market — with a focused path into high-value users first.</p>
+
+      <div class="stat-row">
+        <div class="stat"><div class="n">$238.9B</div><div class="c">Global earphones &amp; headphones market by 2033 (Grand View Research, 2026)</div></div>
+        <div class="stat"><div class="n">14.5%</div><div class="c">CAGR, 2026–2033</div></div>
+      </div>
+
+      <div class="barchart">
+        <div class="bar-col"><div class="fig">$92.6B</div><div class="bar" style="height:35%"></div><div class="yr">'26</div></div>
+        <div class="bar-col"><div class="fig">$106.0B</div><div class="bar" style="height:41%"></div><div class="yr">'27</div></div>
+        <div class="bar-col"><div class="fig">$121.4B</div><div class="bar" style="height:47%"></div><div class="yr">'28</div></div>
+        <div class="bar-col"><div class="fig">$139.0B</div><div class="bar" style="height:53%"></div><div class="yr">'29</div></div>
+        <div class="bar-col"><div class="fig">$159.2B</div><div class="bar" style="height:61%"></div><div class="yr">'30</div></div>
+        <div class="bar-col"><div class="fig">$182.2B</div><div class="bar" style="height:70%"></div><div class="yr">'31</div></div>
+        <div class="bar-col"><div class="fig">$208.7B</div><div class="bar" style="height:80%"></div><div class="yr">'32</div></div>
+        <div class="bar-col peak"><div class="fig">$238.9B</div><div class="bar" style="height:100%"></div><div class="yr">'33</div></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);">Global market trajectory, USD billions. Source: Grand View Research, Earphones &amp; Headphones Market, 2026.</p>
+
+      <h3 class="sub">Core / high-value audience (Tier 1 — must-have)</h3>
+      <div class="grid grid-2">
+        <div class="card"><h4>~13.5M</h4><p>Global contact-center agents (WifiTalents, Contact Center Industry Statistics, 2026)</p></div>
+        <div class="card"><h4>~524K</h4><p>Non-student certified pilots, U.S. (FAA, 2025)</p></div>
+      </div>
+      <div class="note-box"><strong>Note on scope:</strong> our two primary sources for the call-center segment (800K in the venture analysis vs. 13.5M in the pitch deck) use different geographic scopes and definitions. We treat these as addressable audience pools, not a single combined TAM, and are validating the working number through our own pilot outreach.</div>
+
+      <h3 class="sub">Volume / expansion audience (Tier 2–3 — nice-to-have)</h3>
+      <div class="grid grid-2">
+        <div class="card"><h4>~7M</h4><p>Monthly individual Twitch streamers (Twitch, State of Engineering, 2023)</p></div>
+        <div class="card"><h4>~400M</h4><p>Large distributed remote workforce — headset-user sizing pending dedicated source validation</p></div>
+      </div>
+
+      <h3 class="sub">Why now</h3>
+      <div class="grid grid-2">
+        <div class="card"><h4>Audio market expanding</h4><p>A large and growing global market with increasing demand for better audio experiences.</p></div>
+        <div class="card"><h4>Hybrid work keeps headsets embedded</h4><p>Remote and flexible work models are here to stay, keeping headsets in daily workflows.</p></div>
+        <div class="card"><h4>High-usage professionals feel it most</h4><p>Long hours create a clear, quantifiable comfort and ergonomics need.</p></div>
+        <div class="card"><h4>A clear white space</h4><p>No competitor runs an end-to-end ear-scan-to-custom-cushion workflow at scale today.</p></div>
+      </div>
+      <p style="font-size:12px;color:var(--muted);">Start where discomfort is costly. Expand where reach is massive — enterprise first, then consumer expansion.</p>
+    </section>
+
+    <!-- 05 COMPETITION -->
+    <section class="chapter" id="competition">
+      <div class="chapter-head"><span class="chapter-num">05</span><h2>Competitive Landscape</h2></div>
+      <p class="chapter-kicker">Same category. A fundamentally different approach — competitors optimize materials, KUSHN optimizes geometry.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Brand / product</th><th>Price</th><th>Customization</th><th>Fit &amp; comfort</th><th>Key limitation</th></tr></thead>
+          <tbody>
+            <tr><td>Comply — foam ear pads</td><td>$19–35</td><td class="yn no">No</td><td>Moderate</td><td>Stiff, doesn't contour to ear</td></tr>
+            <tr><td>Amazon Basics — replacement pads</td><td>$9–15</td><td class="yn no">No</td><td>Low</td><td>Poor fit, sweat buildup</td></tr>
+            <tr><td>Dekoni Audio — premium pads</td><td>$25–90</td><td class="yn no">No (one-size-fits-all)</td><td>Good</td><td>Premium material, still generic shape</td></tr>
+            <tr><td>Sony / Bose / Shure — OEM pads</td><td>$50–120</td><td class="yn no">No (brand-locked)</td><td>Good</td><td>Expensive, limited innovation</td></tr>
+            <tr><td>NinjaTek — custom 3D-printed pads</td><td>$150–250</td><td class="yn yes">Yes, 3D-printed</td><td>Good</td><td>High price, longer lead times</td></tr>
+            <tr class="hi"><td><strong>KUSHN — personalized ear cushions</strong></td><td><strong>~$50–100</strong></td><td class="yn yes"><strong>Yes — ear scan → custom fit</strong></td><td><strong>Excellent</strong></td><td><strong>Built for real use, solves the root cause</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">The wider competitive field</h3>
+      <p>Beyond direct replacement-pad players, several adjacent threats matter: <strong style="color:var(--ink)">Bose Fit Kit</strong> (depth-sensing ear measurement), <strong style="color:var(--ink)">Sennheiser Pro</strong> and <strong style="color:var(--ink)">Plantronics/Poly</strong> (enterprise headset ecosystems with comfort features already built in), <strong style="color:var(--ink)">Materialise</strong> and other general 3D-manufacturing services that could pivot into ear cushions, and budget players like <strong style="color:var(--ink)">Anker Soundcore</strong> who iterate quickly on cheap memory foam.</p>
+
+      <div class="note-box"><strong>Critical vulnerability to plan around:</strong> Wavelet, Phonak, and Widex already run ear-scanning customization at scale in the billion-dollar hearing-aid market. If any major headphone OEM licenses that approach or acquires a player like Wavelet, the core KUSHN workflow becomes commoditized quickly. Our response to this is addressed directly in Section 09.</div>
+
+      <h3 class="sub">Where the gap actually is</h3>
+      <div class="grid grid-2">
+        <div class="card"><h4>Call centers</h4><p>No vendor has solved headset discomfort as an occupational-health issue. ~800K–13.5M addressable agents; a 15–20% productivity gain implies $15K–30K in savings per 100-agent team, per year.</p></div>
+        <div class="card"><h4>Aviation / professional audio</h4><p>Pressure points on extended-wear headsets matter for pilots on 8+ hour flights. ~150K users, $200–400 ASP, with an FAA/EASA compliance angle that acts as a soft regulatory moat.</p></div>
+      </div>
+    </section>
+
+    <!-- 06 BUSINESS MODEL -->
+    <section class="chapter" id="model">
+      <div class="chapter-head"><span class="chapter-num">06</span><h2>Business Model &amp; Revenue</h2></div>
+      <p class="chapter-kicker">From custom cushions to a healthier, more productive workforce.</p>
+
+      <h3 class="sub">Core revenue streams</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stream</th><th>Description</th><th>Target price</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Custom ear cushions</strong></td><td>Personalized, multi-brand compatible</td><td>$50–100 per pair</td></tr>
+            <tr><td><strong>KUSHN Wellness (sensor add-on)</strong></td><td>Tracks wear-time, pressure &amp; fatigue</td><td>$30–50 per unit</td></tr>
+            <tr><td><strong>Enterprise SaaS dashboard</strong></td><td>Analytics, health insights, team performance</td><td>$5–10 per user / month</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">Full revenue cascade (ranked by profitability &amp; feasibility)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Stream</th><th>ASP</th><th>Margin</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>B2B volume contracts (call centers)</td><td>$120–150 / agent / yr</td><td>55–65%</td><td>Tier 1 priority — highest LTV, stable revenue</td></tr>
+            <tr><td>Aviation / professional licensing</td><td>$180–250 / unit</td><td>50–60%</td><td>High-touch; compliance and brand partnerships</td></tr>
+            <tr><td>D2C e-commerce (gamers, enthusiasts)</td><td>$89–129 / kit</td><td>45–55%</td><td>Tier 2 focus; lower margin due to CAC, higher churn</td></tr>
+            <tr><td>Reordering &amp; accessories</td><td>$35–50 / reorder</td><td>65–75%</td><td>Highest margin — recurring, if base holds</td></tr>
+            <tr><td>OEM IP licensing</td><td>$500K–2M + 5–8% royalty</td><td>70–80%</td><td>Long cycle, strategic risk, highest leverage</td></tr>
+            <tr><td>White-label to platforms</td><td>$100K–500K per implementation</td><td>60–70%</td><td>Lower volume but stickier — via call-center vendors</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">Recommended revenue cascade</h3>
+      <div class="timeline">
+        <div class="tl-item"><div class="when">Year 1</div><h4>B2B enterprise focus</h4><p style="font-size:13.5px;margin:0;color:var(--ink-soft);">Land first call-center contracts; launch D2C influencer channels as a secondary track.</p></div>
+        <div class="tl-item"><div class="when">Year 2</div><h4>Add aviation / professional</h4><p style="font-size:13.5px;margin:0;color:var(--ink-soft);">Expand the call-center footprint and open the aviation/professional segment.</p></div>
+        <div class="tl-item"><div class="when">Year 3</div><h4>OEM &amp; platform licensing</h4><p style="font-size:13.5px;margin:0;color:var(--ink-soft);">Open OEM licensing conversations and white-label to established call-center platforms.</p></div>
+      </div>
+    </section>
+
+    <!-- 07 GTM -->
+    <section class="chapter" id="gtm">
+      <div class="chapter-head"><span class="chapter-num">07</span><h2>Go-To-Market Strategy</h2></div>
+      <p class="chapter-kicker">Enterprise first. A more comfortable tomorrow for everyone, sequenced deliberately.</p>
+
+      <h3 class="sub">Target segments</h3>
+      <div class="grid grid-2">
+        <div class="card"><span class="tag must">Tier 1 · Beachhead</span><h4>Call center agents — ~800K globally</h4><p>High daily usage (8+ hrs), direct B2B partnerships, pilot programs to demonstrate ROI, long-term enterprise contracts.</p></div>
+        <div class="card"><span class="tag must">Tier 1 · Beachhead</span><h4>Aviation / audio professionals — ~150K globally</h4><p>High usage (4–10 hrs), partnerships with airlines and training academies, positioned as a safety and performance enabler.</p></div>
+        <div class="card"><span class="tag nice">Tier 2 · Expansion</span><h4>Gamers / streamers — ~2–3M globally</h4><p>D2C via online channels, influencer collaborations, community-led growth.</p></div>
+        <div class="card"><span class="tag nice">Tier 3 · Expansion</span><h4>Remote workers — ~400M globally</h4><p>D2C via website, content-led marketing, broader digital campaigns.</p></div>
+      </div>
+
+      <h3 class="sub">Why the enterprise wedge over D2C gaming</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Factor</th><th>D2C gaming</th><th>Enterprise call centers</th></tr></thead>
+          <tbody>
+            <tr><td>Time to revenue</td><td>3–4 months (fast)</td><td>6–9 months (slower)</td></tr>
+            <tr><td>Revenue per customer</td><td>$89–120, one-time</td><td>$100K–300K / yr, recurring</td></tr>
+            <tr><td>Unit economics</td><td>37% contribution margin, ~10% monthly churn</td><td>60%+ gross margin, ~5% annual churn</td></tr>
+            <tr><td>Capital required, Year 1</td><td>$300–500K (marketing-heavy)</td><td>$800K–1.2M (sales-heavy)</td></tr>
+            <tr class="hi"><td><strong>Founder likelihood of executing well</strong></td><td>~40%</td><td><strong>~70% — aligns with our research and B2B training</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>We're going <strong style="color:var(--ink)">enterprise-first</strong>: a call-center manager cares far less about a founder's gaming credibility than about a documented ROI case, and two or three pilot contracts are a far stronger seed-raise story than chasing a thousand D2C customers.</p>
+
+      <h3 class="sub">Organic growth tactics</h3>
+      <div class="grid grid-2">
+        <div class="card"><h4>Research content</h4><p>Quarterly whitepapers, e.g. "The Comfort Crisis in Call Centers," distributed via LinkedIn into enterprise leads.</p></div>
+        <div class="card"><h4>SEO &amp; community</h4><p>Target high-intent search terms; sponsor gaming tournaments and esports teams for D2C reach.</p></div>
+        <div class="card"><h4>Referral program</h4><p>Credit-based referrals for D2C, aimed at capturing high-LTV repeat customers.</p></div>
+        <div class="card"><h4>Industry partnerships</h4><p>Align with ergonomic consultants, call-center industry associations, and audio professional groups.</p></div>
+      </div>
+    </section>
+
+    <!-- 08 FINANCIALS -->
+    <section class="chapter" id="financials">
+      <div class="chapter-head"><span class="chapter-num">08</span><h2>Financial Projections &amp; Unit Economics</h2></div>
+      <p class="chapter-kicker">Conservative assumptions, stated plainly — the numbers we'd want to see if we were on the other side of this table.</p>
+
+      <h3 class="sub">Unit economics — D2C (single sale)</h3>
+      <div class="grid grid-4">
+        <div class="card"><h4>$99</h4><p>ASP — scan kit + one cushion set</p></div>
+        <div class="card"><h4>$27</h4><p>COGS — manufacturing + fulfillment (73% gross margin)</p></div>
+        <div class="card"><h4>$35</h4><p>CAC — influencer marketing + organic</p></div>
+        <div class="card"><h4>10.6x</h4><p>LTV:CAC, worst case with zero reorders ($370 LTV)</p></div>
+      </div>
+      <p style="font-size:12.5px;">This assumes zero reorders. In reality, roughly 15–20% of D2C customers reorder within 24 months, which improves the ratio further — we're treating the conservative case as the honest baseline.</p>
+
+      <h3 class="sub">Unit economics — B2B (100-agent team, 3-year contract)</h3>
+      <div class="grid grid-4">
+        <div class="card"><h4>$45K</h4><p>Contract ASP — $150/agent/yr × 100 agents × 3 years</p></div>
+        <div class="card"><h4>$12K</h4><p>COGS — bulk manufacturing &amp; delivery (73% gross margin)</p></div>
+        <div class="card"><h4>$20K</h4><p>Sales CAC — 6-month enterprise sales cycle</p></div>
+        <div class="card"><h4>$13K</h4><p>Net profit per contract — 29% net margin</p></div>
+      </div>
+
+      <h3 class="sub">COGS &amp; CAC assumptions</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Line item</th><th>Value</th><th>Rationale</th></tr></thead>
+          <tbody>
+            <tr><td>3D-printer COGS per cushion set</td><td>$12–18</td><td>FDM/SLS at modest scale, ~$50/L resin, 15–20 units per liter</td></tr>
+            <tr><td>Scanning kit (amortized)</td><td>$2–4</td><td>Server + processing costs, negligible per unit</td></tr>
+            <tr><td>Fulfillment &amp; packaging</td><td>$5–8</td><td>Lower for B2B bulk ($2–3)</td></tr>
+            <tr><td>D2C monthly churn</td><td>8–12%</td><td>High for a hardware accessory purchase pattern</td></tr>
+            <tr><td>B2B annual churn</td><td>3–8%</td><td>Low — enterprise stickiness once integrated</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="sub">Revenue &amp; profitability, Year 1–5 (base case)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Metric</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Year 5</th></tr></thead>
+          <tbody>
+            <tr><td>B2B revenue</td><td>$800K</td><td>$4.2M</td><td>$12M</td><td>$45M</td></tr>
+            <tr><td>D2C revenue</td><td>$400K</td><td>$1.8M</td><td>$4.5M</td><td>$12M</td></tr>
+            <tr><td>Reorder / subscription</td><td>$50K</td><td>$600K</td><td>$3M</td><td>$15M</td></tr>
+            <tr><td><strong>Total revenue</strong></td><td><strong>$1.25M</strong></td><td><strong>$6.6M</strong></td><td><strong>$19.5M</strong></td><td><strong>$72M</strong></td></tr>
+            <tr><td>COGS + operating costs</td><td>$1.8M</td><td>$4.2M</td><td>$9.8M</td><td>$32M</td></tr>
+            <tr class="hi"><td><strong>EBITDA</strong></td><td><strong>($550K)</strong></td><td><strong>$2.4M</strong></td><td><strong>$9.7M</strong></td><td><strong>$40M</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:12.5px;">Year 1 is unprofitable by design; profitability begins Year 2 on the back of enterprise contract stacking.</p>
+
+      <h3 class="sub">Funding &amp; burn requirements</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Milestone</th><th>Funding needed</th><th>Use of funds</th></tr></thead>
+          <tbody>
+            <tr><td>MVP / prototype</td><td>$150K (pre-seed)</td><td>Scanning app, 3D printer, materials, prototype validation</td></tr>
+            <tr><td>Pilot launch (50 beta users)</td><td>+$300K</td><td>Founders' runway, first-batch manufacturing, marketing</td></tr>
+            <tr><td>Seed — scale to $1.25M revenue</td><td>$1.5–2M</td><td>Sales team (2), production infrastructure, enterprise pilots</td></tr>
+            <tr><td>Series A — scale to $6M+ revenue</td><td>$4–5M</td><td>Manufacturing capacity, sales expansion, supply chain, enterprise team</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 09 MOAT & RISK -->
+    <section class="chapter" id="moat">
+      <div class="chapter-head"><span class="chapter-num">09</span><h2>Moat, Defensibility &amp; Risk</h2></div>
+      <p class="chapter-kicker">An honest structural assessment — and the plan to change it.</p>
+
+      <h3 class="sub">Moat evaluation</h3>
+      <div class="meter-row"><div class="meter-label">Network effects</div><div class="meter-track"><div class="meter-fill weak" style="width:15%"></div></div><div class="meter-val">Weak</div></div>
+      <div class="meter-row"><div class="meter-label">Brand</div><div class="meter-track"><div class="meter-fill weak" style="width:32%"></div></div><div class="meter-val">Weak–Medium</div></div>
+      <div class="meter-row"><div class="meter-label">Data advantage</div><div class="meter-track"><div class="meter-fill med" style="width:55%"></div></div><div class="meter-val">Medium, if built</div></div>
+      <div class="meter-row"><div class="meter-label">Switching costs</div><div class="meter-track"><div class="meter-fill med" style="width:50%"></div></div><div class="meter-val">Medium (B2B)</div></div>
+      <div class="meter-row"><div class="meter-label">Community</div><div class="meter-track"><div class="meter-fill weak" style="width:32%"></div></div><div class="meter-val">Weak–Medium</div></div>
+      <div class="meter-row"><div class="meter-label">Economies of scale</div><div class="meter-track"><div class="meter-fill weak" style="width:20%"></div></div><div class="meter-val">Weak</div></div>
+      <div class="meter-row"><div class="meter-label">Distribution</div><div class="meter-track"><div class="meter-fill med" style="width:48%"></div></div><div class="meter-val">Medium (B2B)</div></div>
+      <div class="meter-row"><div class="meter-label">Technology IP</div><div class="meter-track"><div class="meter-fill weak" style="width:18%"></div></div><div class="meter-val">Weak</div></div>
+      <div class="meter-row"><div class="meter-label">Compliance / regulatory</div><div class="meter-track"><div class="meter-fill med" style="width:50%"></div></div><div class="meter-val">Medium, if claimed</div></div>
+
+      <div class="note-box"><strong>Overall assessment: weak, and we're saying so.</strong> Our edge today is first-mover speed and manufacturing execution, not a structural moat. A well-capitalized competitor could replicate the workflow in 12–18 months once the model is proven. The only durable moat available to us is <strong>data and clinical validation</strong> — 18–24 months of customer comfort and productivity data, ideally with third-party validation, that turns "we sell cushions" into "we're the only ones with the proof."</div>
+
+      <h3 class="sub">Top risks &amp; mitigations</h3>
+      <div class="risk">
+        <div class="rank">1</div>
+        <div><h4>Market treats this as "nice-to-have," not "must-have"</h4><div class="badges"><span class="badge-sm critical">Critical impact</span><span class="badge-sm medium">35–40% probability</span></div><p>D2C customers may not prioritize comfort enough to pay $80–120 when $20 alternatives exist.</p><div class="mit"><b>Mitigation:</b> Pivot weight to B2B occupational health, where ROI is measurable and the buyer isn't the end user. De-prioritize D2C until enterprise product-market fit is proven.</div></div>
+      </div>
+      <div class="risk">
+        <div class="rank">2</div>
+        <div><h4>3D-printing COGS can't get below ~$20/unit at volume</h4><div class="badges"><span class="badge-sm critical">Critical impact</span><span class="badge-sm medium">45–50% probability</span></div><p>Unit economics tighten if per-unit manufacturing cost doesn't fall with scale.</p><div class="mit"><b>Mitigation:</b> Lock manufacturing-partner pricing at 100/250/500/1,000-unit tiers up front; explore injection-molded variants for high-volume SKUs.</div></div>
+      </div>
+      <div class="risk">
+        <div class="rank">3</div>
+        <div><h4>An OEM (Sony, Bose, Sennheiser) builds or acquires a competing solution</h4><div class="badges"><span class="badge-sm critical">Critical impact</span><span class="badge-sm high">50–60% probability</span></div><p>Wavelet, Phonak, and Widex already do this in hearing aids; the crossover risk is real.</p><div class="mit"><b>Mitigation:</b> Move fast on enterprise lock-in before the threat crystallizes; treat IP licensing to an OEM as a credible, planned exit path rather than a failure mode.</div></div>
+      </div>
+      <div class="risk">
+        <div class="rank">4</div>
+        <div><h4>Smartphone ear-scan quality is inconsistent for a meaningful share of users</h4><div class="badges"><span class="badge-sm high">High impact</span><span class="badge-sm medium">30–40% probability</span></div><p>Fails to produce a usable scan for an estimated 20%+ of users without a fallback.</p><div class="mit"><b>Mitigation:</b> Test scanning across 500+ ear shapes before scaling; build an in-person scanning fallback and improve ML robustness in the app.</div></div>
+      </div>
+      <div class="risk">
+        <div class="rank">5</div>
+        <div><h4>Enterprise sales cycles run 6–9 months, burning cash before revenue lands</h4><div class="badges"><span class="badge-sm medium">Medium impact</span><span class="badge-sm medium">40–50% probability</span></div><p>Each pilot costs $5K–10K before any contract revenue arrives.</p><div class="mit"><b>Mitigation:</b> Secure enough pre-seed runway (12–18 months) up front; focus on 3–5 beachhead customers rather than spreading across 20 simultaneous pilots.</div></div>
+      </div>
+    </section>
+
+    <!-- 10 ROADMAP -->
+    <section class="chapter" id="roadmap">
+      <div class="chapter-head"><span class="chapter-num">10</span><h2>Execution Roadmap</h2></div>
+      <p class="chapter-kicker">A specific, founder-executable 18-month plan — not theory.</p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="when">Weeks 1–4 · MVP</div>
+          <h4>Prototype, validation planning &amp; manufacturing</h4>
+          <ul>
+            <li>Scan 50+ ear shapes across the IIMB community to test app accuracy</li>
+            <li>Get manufacturing quotes from three 3D-printing partners for 100 units</li>
+            <li>Map 10+ call centers across Bangalore, Pune, and Hyderabad with named decision-makers</li>
+            <li>Open a biomechanics lab partnership for independent pressure-mapping validation</li>
+            <li>Lock CAD design logic and order the first 100-unit production run</li>
+          </ul>
+          <span class="metric">Target: 80%+ clean scans, &lt;10% manufacturing defects</span>
+        </div>
+        <div class="tl-item">
+          <div class="when">Weeks 5–12 · Validation</div>
+          <h4>Call-center outreach and pilot programs</h4>
+          <ul>
+            <li>Run a structured outreach sequence (email → phone) to book pilot conversations</li>
+            <li>Commit to three 30-day pilots (10–15 agents each), free, as research partnerships</li>
+            <li>Run a weekly comfort survey plus employer-provided quality and sick-day metrics</li>
+            <li>Document pilot results as one-pagers and a public case study</li>
+          </ul>
+          <span class="metric">Target: 3 pilots running, 60%+ average comfort improvement</span>
+        </div>
+        <div class="tl-item">
+          <div class="when">Months 4–6 · Revenue</div>
+          <h4>Convert pilots to paid production contracts</h4>
+          <ul>
+            <li>Convert at least one of three pilots into a paid production contract</li>
+            <li>Expand outreach into Tier-2 city call centers with less competition</li>
+            <li>Explore white-label revenue-share partnerships with call-center consultancies</li>
+          </ul>
+          <span class="metric">Target: 1–2 paid customers, first meaningful monthly revenue</span>
+        </div>
+        <div class="tl-item">
+          <div class="when">Months 5–8 · Fundraising</div>
+          <h4>Pre-seed fundraising sprint</h4>
+          <ul>
+            <li>Build a 10-slide pitch deck around Problem → Solution → Traction → Market → Model → Team → Ask</li>
+            <li>Pursue angel investors, pre-seed VCs, and the Startup India Seed Fund in parallel</li>
+          </ul>
+          <span class="metric">Target: pre-seed round committed</span>
+        </div>
+        <div class="tl-item">
+          <div class="when">Months 9–18 · Scale</div>
+          <h4>Product iteration and enterprise expansion</h4>
+          <ul>
+            <li>Build a lightweight web dashboard for agent onboarding and HR admin visibility</li>
+            <li>Lock a second, larger production run (250–500 units) with the manufacturing partner</li>
+            <li>Hire the first non-founder team member, focused on enterprise sales</li>
+          </ul>
+          <span class="metric">Target: 5–10 enterprise customers, 500+ agents covered</span>
+        </div>
+      </div>
+
+      <h3 class="sub">The pivot we're building toward</h3>
+      <p>Our core IP — the ear-scan-to-CAD pipeline plus manufacturing — is worth more repositioned as an occupational-health platform than as a standalone headphone accessory. <strong style="color:var(--ink)">KUSHN Wellness</strong> combines custom ear pads, a wear-time and fatigue sensor, a productivity dashboard, and an ergonomic recommendations engine, sold to call-center operators and HR platforms as a compliance and wellness tool priced at $200–300 per agent per year. That reframes the addressable market from roughly $500M in headphone accessories to a nascent $5–10B call-center wellness SaaS category, with stickier, recurring revenue and a much clearer path to an enterprise-grade acquisition.</p>
+    </section>
+
+    <!-- 11 ASK & TEAM -->
+    <section class="chapter" id="ask">
+      <div class="chapter-head"><span class="chapter-num">11</span><h2>The Ask &amp; Team</h2></div>
+      <p class="chapter-kicker">What we're asking for, what changes our score, and who's building it.</p>
+
+      <div class="ask-hero">
+        <div class="t" style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#9aa1b6;font-weight:700;">Raising</div>
+        <div class="amt">$150K – $450K pre-seed</div>
+        <div class="use">To fund the ear-scan MVP, first 100-unit production run, three call-center pilots, and independent pressure-mapping validation over the next six months — followed by a $1.5–2M seed round once 2–3 paid enterprise contracts are signed.</div>
+        <div class="ask-tiers">
+          <div class="ask-tier"><div class="t">MVP / prototype</div><div class="v">$150K</div></div>
+          <div class="ask-tier"><div class="t">Pilot launch</div><div class="v">+$300K</div></div>
+          <div class="ask-tier"><div class="t">Seed, next stage</div><div class="v">$1.5–2M</div></div>
+          <div class="ask-tier"><div class="t">Series A, later</div><div class="v">$4–5M</div></div>
+        </div>
+      </div>
+
+      <h3 class="sub">What would change the score</h3>
+      <div class="grid grid-3">
+        <div class="card"><h4>Proof of market fit</h4><p>Three or more call-center customers at $100K+ ARR each, or 1,000+ D2C customers with 20%+ repeat purchase within six months.</p></div>
+        <div class="card"><h4>Defensible validation</h4><p>A third-party study published in an ergonomics journal, or a patent filed on the ear-scan-to-cushion algorithm.</p></div>
+        <div class="card"><h4>An experienced operator joins</h4><p>A COO with hardware or manufacturing execution experience, demonstrating the hard parts are covered.</p></div>
+      </div>
+
+      <h3 class="sub">Team — "Head Hots"</h3>
+      <div class="grid grid-3">
+        <div class="team-card"><div class="avatar">P</div><h4>Prakhar Chaurasiya</h4><div class="role">Co-Founder</div><p style="font-size:13px;margin:0;color:var(--ink-soft);">IIM Bangalore</p></div>
+        <div class="team-card"><div class="avatar">R</div><h4>Rishabh Jaiswal</h4><div class="role">Co-Founder</div><p style="font-size:13px;margin:0;color:var(--ink-soft);">IIM Bangalore</p></div>
+        <div class="team-card"><div class="avatar">A</div><h4>Aditi Sharma</h4><div class="role">Co-Founder</div><p style="font-size:13px;margin:0;color:var(--ink-soft);">SRCC, Delhi</p></div>
+      </div>
+
+      <h3 class="sub">Sources</h3>
+      <div class="src-list">
+        <div>Grand View Research — Earphones &amp; Headphones Market, 2026</div>
+        <div>Grand View Research — Global Headphone Market, 2023</div>
+        <div>WifiTalents — Contact Center Industry Statistics, 2026</div>
+        <div>FAA — Certified Pilot Statistics, 2025</div>
+        <div>Twitch — State of Engineering, 2023</div>
+        <div>McKinsey — Contact Center Attrition Cost per Employee, 2021</div>
+        <div>Contact Center World — Global Agent Estimate, 2023</div>
+        <div>Boeing — Commercial Pilots, 2022</div>
+        <div>Newzoo — PC / Console Gamers, 2023</div>
+        <div>Exploding Topics — Remote Workers, 2023</div>
+        <div>Headphonesty — Ear Pad Replacement Cycle, 2022</div>
+        <div>Manufacturer &amp; retailer pricing — Comply, Amazon, Dekoni, NinjaTek, OEM sites, 2024</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div>KUSHN — Confidential venture portfolio prepared for the evaluation panel.</div>
+  <div>Comfort drives human potential.</div>
+</footer>
+
+</body>
+</html>
